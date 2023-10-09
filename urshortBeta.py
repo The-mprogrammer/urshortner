@@ -2,6 +2,8 @@
 import json
 import requests
 import pyshorteners
+import pyLense
+from pyLense.Lense import Neurals
 from pymongo import MongoClient
 from telebot import telebot, TeleBot, types, custom_filters
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -142,9 +144,9 @@ def count_users(msg):
 
 @bot.message_handler(func=lambda m: True)
 def get_url(msg):
-  check_url = msg.text.strip()
-  if check_url.startswith("https://") or check_url.startswith(
-      "http") or check_url.startswith("www."):
+  url = msg.text
+  ep = Neurals(url)
+  if ep.check() == "Yes":
     link = msg.text.strip()
     linkpw = f"https://api.lnk.pw/1.0/public/lnk.pw/link?long={link}"
     bit = pyshorteners.Shortener(
